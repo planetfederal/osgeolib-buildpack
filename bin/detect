@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+BUILD_DIR=$1
+echo $BUILDDIR
+BP=$(dirname $(dirname $0))
+echo $BP
+
+# Exit early if app is clearly not Python.
+if [ ! -f $BUILD_DIR/cf/OSGEO-LIB ]; then
+  exit 1
+fi
+
+echo "osgeo-lib `cat $BP/VERSION`"

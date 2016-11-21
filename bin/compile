@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+# set -x          # enable debugging
+
+# Paths.
+build_dir=$1
+cache_dir=$2
+bp_dir=$(cd $(dirname $0); cd ..; pwd)
+vendor_dir=$build_dir/.heroku/vendor
+
+# CF Common
+BUILDPACK_PATH=$bp_dir
+export BUILDPACK_PATH
+source $bp_dir/compile-extensions/lib/common
+# END CF Common
+source $bp_dir/bin/common.sh
+
+mkdir -p $vendor_dir
+
+# The location of the pre-compiled cryptography binary.
+VENDORED_OSGEO="https://s3.amazonaws.com/boundless-cloudfoundry/cflinuxfs2/osgeolib-0.0.1-linux-x64.tar.gz"
+
+if [ ! -f "$vendor_dir/bin/gdalserver" ]; then
+  status "Bootstrapping osgeolib."
+  # Download and extract into target vendor directory.
+  curl $VENDORED_OSGEO -s | tar zxv -C $vendor_dir &> /dev/null
+fi
+
+# Update env variables
+status "Building runtime environment."
+mkdir -p $build_dir/.profile.d
+echo 'export LIBKML_LIBS="${LIBRARY_PATH}"' > $build_dir/.profile.d/osgeo.sh
+echo 'export GDAL_DATA="$HOME/vendor/share/gdal"' >> $build_dir/.profile.d/osgeo.sh
+echo 'export PROJ_LIB="$HOME/vendor/share/proj"' >> $build_dir/.profile.d/osgeo.sh
+echo 'export GEOS_LIBRARY_PATH="$HOME/vendor/lib"' >> $build_dir/.profile.d/osgeo.sh
+status "Done."

@@ -1,1 +1,1 @@
-osgeo-lib-buildpack
+osgeolib-buildpack

@@ -1,0 +1,26 @@
+---
+language: osgeolib
+default_versions:
+  - name: osgeolib
+    version: 0.0.1
+exclude_files:
+- ".git/"
+- ".gitignore"
+- ".gitmodules"
+- ".rspec"
+- cf_spec/
+- log/
+- test/
+- buildpack-packager/
+- osgeolib_buildpack-*v*.zip
+url_to_dependency_map:
+- match: geos.tar.gz
+  name: osgeo-lib
+  version: 0.0.1
+dependencies:
+  - name: osgeolib
+    version: 0.0.1
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://s3.amazonaws.com/boundless-cloudfoundry/cflinuxfs2/osgeolib-0.0.1-linux-x64.tar.gz
+    md5: 257a4f3c3afa9429d343e495df22a60a

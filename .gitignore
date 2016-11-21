@@ -1,0 +1,4 @@
+.bundle
+cf-ssh.yml
+log/
+staticfile_buildpack*.zip
