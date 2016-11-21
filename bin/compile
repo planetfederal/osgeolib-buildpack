@@ -31,7 +31,9 @@ fi
 status "Building runtime environment."
 mkdir -p $build_dir/.profile.d
 echo 'export LIBKML_LIBS="${LIBRARY_PATH}"' > $build_dir/.profile.d/osgeo.sh
-echo 'export GDAL_DATA="$HOME/vendor/share/gdal"' >> $build_dir/.profile.d/osgeo.sh
-echo 'export PROJ_LIB="$HOME/vendor/share/proj"' >> $build_dir/.profile.d/osgeo.sh
-echo 'export GEOS_LIBRARY_PATH="$HOME/vendor/lib"' >> $build_dir/.profile.d/osgeo.sh
+echo 'export GDAL_DATA="/app/.heroku/vendor/share/gdal"' >> $build_dir/.profile.d/osgeo.sh
+echo 'export PROJ_LIB="/app/.heroku/vendor/share/proj"' >> $build_dir/.profile.d/osgeo.sh
+echo 'export GEOS_LIBRARY_PATH="/app/.heroku/vendor/lib"' >> $build_dir/.profile.d/osgeo.sh
+echo 'export PYTHONPATH="/app/.heroku/vendor/python-osgeolib/lib/python2.7/site-packages":"${PYTHONPATH}"'
+echo 'export TEST=$build_dir' >> $build_dir/.profile.d/osgeo.sh
 status "Done."

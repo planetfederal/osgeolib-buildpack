@@ -6,7 +6,7 @@ set -eo pipefail
 
 sandbox=/tmp/sandbox
 osgeolib=$sandbox/osgeolib
-pythonsp=$osgeolib/python
+pythonsp=$osgeolib/python-osgeolib
 
 apt-get install -y libtool \
                    libffi-dev \
