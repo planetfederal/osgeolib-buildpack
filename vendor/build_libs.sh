@@ -4,6 +4,7 @@
 ##
 set -eo pipefail
 
+version="0.0.1"
 sandbox=/tmp/sandbox
 osgeolib=$sandbox/osgeolib
 pythonsp=$osgeolib/python-osgeolib
@@ -23,12 +24,11 @@ export PKG_CONFIG_PATH="/tmp/sandbox/osgeolib/lib/pkgconfig":"${PKG_CONFIG_PATH}
 cd $sandbox
 
 # compile postgresql-client
-wget https://ftp.postgresql.org/pub/source/v9.5.3/postgresql-9.5.3.tar.gz
-tar -xf postgresql-9.5.3.tar.gz && cd postgresql-9.5.3
+wget https://ftp.postgresql.org/pub/source/v9.6.1/postgresql-9.6.1.tar.gz
+tar -xf postgresql-9.6.1.tar.gz && cd postgresql-9.6.1
 sed --in-place '/fmgroids/d' src/include/Makefile
 ./configure --prefix=$osgeolib \
-            --without-readline \
-            --enable-static=no
+            --without-readline
 make -C src/bin install
 make -C src/include install
 make -C src/interfaces install
@@ -41,6 +41,13 @@ cmake -DCMAKE_INSTALL_PREFIX:PATH=$osgeolib .
 make install
 cd $sandbox
 
+# compile openjpeg2
+wget https://github.com/uclouvain/openjpeg/archive/v2.1.2.tar.gz
+tar -xf v2.1.2.tar.gz && cd openjpeg-2.1.2
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$osgeolib .
+make install
+cd $sandbox
+
 # compile geos
 wget http://download.osgeo.org/geos/geos-3.6.0.tar.bz2
 tar -xf geos-3.6.0.tar.bz2 && cd geos-3.6.0
@@ -49,15 +56,15 @@ make && make install
 cd $sandbox
 
 # compile proj
-wget http://download.osgeo.org/proj/proj-4.9.2.tar.gz
-tar -xf proj-4.9.2.tar.gz && cd proj-4.9.2/
+wget http://download.osgeo.org/proj/proj-4.9.3.tar.gz
+tar -xf proj-4.9.3.tar.gz && cd proj-4.9.3/
 ./configure --prefix=$osgeolib --enable-static=no
 make install
 cd $sandbox
 
 # compile gdal
-wget http://download.osgeo.org/gdal/2.0.3/gdal-2.0.3.tar.gz
-tar xf gdal-2.0.3.tar.gz && cd gdal-2.0.3/
+wget http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz
+tar xf gdal-2.1.2.tar.gz && cd gdal-2.1.2/
 ./configure --prefix=$osgeolib \
     --with-jpeg \
     --with-png=internal \
@@ -75,6 +82,7 @@ tar xf gdal-2.0.3.tar.gz && cd gdal-2.0.3/
     --with-libkml=$osgeolib \
     --with-libkml-inc=$osgeolib/include/kml \
     --with-pg=$osgeolib/bin/pg_config \
+    --with-openjpeg=$osgeolib \
     --enable-static=no
 make install
 cd swig/python
@@ -89,4 +97,4 @@ rm -fr $osgeolib/include/boost
 
 # tar up directory
 cd /tmp/sandbox/osgeolib
-tar -czf /app/osgeolib-0.0.1-linux-x64.tar.gz *
+tar -czf /app/osgeolib-${version}-linux-x64.tar.gz *
