@@ -35,6 +35,7 @@ OSGeo Libraries included
 + geos-3.6.0
 + proj-4.9.3
 + gdal-2.1.2
++ python-ldap-2.4.28
 
 The buildpack also adds the following env variables to .profile.d/osgeo.sh
 
@@ -44,8 +45,8 @@ The buildpack also adds the following env variables to .profile.d/osgeo.sh
 + GEOS_LIBRARY_PATH
 + PYTHONPATH *
 
-* gdal `swig/python` (osgeo python package) is added to `/app/.heroku/vendor/python-osgeolib/lib/python2.7/site-packages`
-to ensure that the python package matches the version of GDAL installed.
+* gdal (osgeo python package) and python-ldap is added to `/app/.heroku/vendor/python-osgeolib/lib/python2.7/site-packages`
+to ensure that the python package matches the version of GDAL/LDAP installed.
 
 Steps to build the osgeolib-\*-.tar.gz
 --------------------------------------

@@ -4,7 +4,7 @@
 ##
 set -eo pipefail
 
-version="0.0.1"
+version="0.0.2"
 sandbox=/tmp/sandbox
 osgeolib=$sandbox/osgeolib
 pythonsp=$osgeolib/python-osgeolib
@@ -88,6 +88,15 @@ make install
 cd swig/python
 python setup.py build
 mkdir -p $pythonsp
+PYTHONPATH=$pythonsp
+python setup.py install --prefix=$pythonsp
+cd $sandbox
+
+
+# compile python-ldap
+wget https://pypi.python.org/packages/56/b0/d9c47d14ad801f626ff44077548324530f384461b34e4c08a98455ca242d/python-ldap-2.4.28.tar.gz
+tar xf python-ldap-2.4.28.tar.gz && cd python-ldap-2.4.28
+python setup.py build
 PYTHONPATH=$pythonsp
 python setup.py install --prefix=$pythonsp
 cd $sandbox
